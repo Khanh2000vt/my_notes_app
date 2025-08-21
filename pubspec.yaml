@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   mix: ^1.7.0
   mix_annotations: ^1.7.0
+  google_fonts: ^6.3.0
 
 dev_dependencies:
   flutter_test:
