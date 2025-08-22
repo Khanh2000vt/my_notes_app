@@ -1,33 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:mix/mix.dart';
-import 'package:my_notes_app/core/design_system/exports.dart';
-import 'app/app_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+import 'app/app.dart';
+import 'app/app_router.dart';
+import 'core/constants/exports.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeAuthToken();
   runApp(const MyApp());
+}
+
+Future<void> initializeAuthToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString(StorageConstants.authToken);
+  authToken.value = token;
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    final combinedTheme = MixThemeData.withMaterial().merge(lightBlueTheme);
-    return MixTheme(
-      data: combinedTheme,
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          appBar: AppBar(title: const Text('Flutter Demo Home Page')),
-          body: Builder(
-            builder: (context) => ButtonCustom(
-              label: 'Test Button',
-              onPressed: () {},
-              variant: ButtonVariant.filled,
-            ),
-          ),
-        ),
-      ),
-    );
+    return MyNotes();
   }
 }

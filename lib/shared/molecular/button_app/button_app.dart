@@ -1,7 +1,7 @@
 import 'package:my_notes_app/core/design_system/exports.dart';
 
-final class FilledButton extends ButtonCustom {
-  const FilledButton({
+final class ButtonAppFilled extends ButtonCustom {
+  const ButtonAppFilled({
     super.key,
     required super.label,
     super.disabled = false,
@@ -11,8 +11,8 @@ final class FilledButton extends ButtonCustom {
   }) : super(variant: ButtonVariant.filled);
 }
 
-final class OutlinedButton extends ButtonCustom {
-  const OutlinedButton({
+final class ButtonAppOutlined extends ButtonCustom {
+  const ButtonAppOutlined({
     super.key,
     required super.label,
     super.disabled = false,
@@ -22,8 +22,8 @@ final class OutlinedButton extends ButtonCustom {
   }) : super(variant: ButtonVariant.outlined);
 }
 
-final class ElevatedButton extends ButtonCustom {
-  const ElevatedButton({
+final class ButtonAppElevated extends ButtonCustom {
+  const ButtonAppElevated({
     super.key,
     required super.label,
     super.disabled = false,
@@ -33,8 +33,8 @@ final class ElevatedButton extends ButtonCustom {
   }) : super(variant: ButtonVariant.elevated);
 }
 
-final class LinkButton extends ButtonCustom {
-  const LinkButton({
+final class ButtonAppLink extends ButtonCustom {
+  const ButtonAppLink({
     super.key,
     required super.label,
     super.disabled = false,
