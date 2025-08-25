@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_notes_app/routing/router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
-import 'app/app_router.dart';
 import 'core/constants/exports.dart';
 
 Future<void> main() async {

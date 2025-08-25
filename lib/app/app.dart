@@ -1,8 +1,8 @@
 // Cấu hình MaterialApp.router
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
+import 'package:my_notes_app/routing/router.dart';
 
-import 'app_router.dart';
 import 'app_theme.dart';
 
 class MyNotes extends StatelessWidget {
@@ -15,7 +15,7 @@ class MyNotes extends StatelessWidget {
       child: MaterialApp.router(
         title: 'My Notes',
         debugShowCheckedModeBanner: false,
-        routerConfig: routers,
+        routerConfig: router,
       ),
     );
   }
