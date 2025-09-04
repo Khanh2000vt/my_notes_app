@@ -1,7 +1,8 @@
 // Cấu hình GoRouter
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_notes_app/features/tabs/home/home_screen.dart';
+import 'package:my_notes_app/features/create_room/widget/create_room_screen.dart';
+import 'package:my_notes_app/features/home/widgets/home_screen.dart';
 import 'package:my_notes_app/routing/routes.dart';
 
 import '../features/auth/login/login_screen.dart';
@@ -10,8 +11,9 @@ final ValueNotifier<String?> authToken = ValueNotifier(null);
 
 final router = GoRouter(
   refreshListenable: authToken,
+  initialLocation: Routes.createRoom,
   redirect: (context, state) {
-    return Routes.home;
+    return null;
     // final String? token = authToken.value;
     // final bool isLoggedIn = token != null && token.isNotEmpty;
     // final bool isLoginPage = state.matchedLocation == Routes.login;
@@ -36,18 +38,17 @@ final router = GoRouter(
         return LoginScreen();
       },
     ),
-    ShellRoute(
-      builder: (context, state, child) {
-        return child;
+    GoRoute(
+      path: Routes.home,
+      builder: (context, state) {
+        return HomeScreen();
       },
-      routes: [
-        GoRoute(
-          path: Routes.home,
-          builder: (context, state) {
-            return HomeScreen();
-          },
-        ),
-      ],
+    ),
+    GoRoute(
+      path: Routes.createRoom,
+      builder: (context, state) {
+        return CreateRoomScreen();
+      },
     ),
   ],
   errorBuilder: (context, state) => const LoginScreen(),
