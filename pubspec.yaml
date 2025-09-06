@@ -18,6 +18,7 @@ dependencies:
   flutter_form_builder: ^10.2.0
   form_builder_validators: ^11.2.0
   intl: ^0.20.2
+  jiffy: ^6.4.3
 
 dev_dependencies:
   flutter_test:
