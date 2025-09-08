@@ -35,18 +35,28 @@ class ActionApp {
         return CupertinoActionSheet(
           title: title == null ? null : Text(title),
           message: message == null ? null : Text(message),
+
           actions: [
-            CupertinoActionSheetAction(onPressed: onEdit, child: Text('Sửa')),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(ctx);
+                onEdit();
+              },
+              child: Text('Sửa'),
+            ),
             CupertinoActionSheetAction(
               isDestructiveAction: true,
-              onPressed: onRemove,
+              onPressed: () {
+                Navigator.pop(ctx);
+                onRemove();
+              },
               child: Text('Xoá'),
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
             isDefaultAction: true,
             onPressed: () {
-              Navigator.pop(ctx, null);
+              Navigator.pop(ctx);
             },
             child: Text('Huỷ'),
           ),

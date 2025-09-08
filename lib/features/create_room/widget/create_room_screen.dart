@@ -6,6 +6,7 @@ import 'package:my_notes_app/features/create_room/widget/member_room_widget.dart
 import 'package:my_notes_app/features/create_room/widget/reminder_daily_room.dart';
 import 'package:my_notes_app/features/create_room/widget/reminder_monthly_room.dart';
 import 'package:my_notes_app/features/create_room/widget/room_information_widget.dart';
+import 'package:my_notes_app/shared/atomic/hide_keybroad/hide_keyboard_widget.dart';
 
 class CreateRoomScreen extends StatelessWidget {
   CreateRoomScreen({super.key});
@@ -13,29 +14,33 @@ class CreateRoomScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: const Text('Tạo phòng'),
-        leading: CupertinoNavigationBarBackButton(
-          previousPageTitle: 'Trở lại',
-          onPressed: () {
-            context.pop();
-          },
+    return HideKeyboardWidget(
+      child: CupertinoPageScaffold(
+        resizeToAvoidBottomInset: true,
+        navigationBar: CupertinoNavigationBar(
+          middle: const Text('Tạo phòng'),
+          leading: CupertinoNavigationBarBackButton(
+            previousPageTitle: 'Trở lại',
+            onPressed: () {
+              context.pop();
+            },
+          ),
+          trailing: Text('Xong'),
         ),
-        trailing: Text('Xong'),
-      ),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: FormBuilder(
-            key: _formKey,
-            child: Column(
-              children: [
-                RoomInformationWidget(),
-                MemberRoomWidget(),
-                FixedAmountRoomWidget(),
-                ReminderMonthlyRoom(),
-                ReminderDailyRoom(),
-              ],
+        child: SafeArea(
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: FormBuilder(
+              key: _formKey,
+              child: Column(
+                children: [
+                  RoomInformationWidget(),
+                  MemberRoomWidget(),
+                  FixedAmountRoomWidget(),
+                  ReminderMonthlyRoom(),
+                  ReminderDailyRoom(),
+                ],
+              ),
             ),
           ),
         ),

@@ -24,7 +24,14 @@ class FormRowWidget extends StatelessWidget {
       error: error == null ? null : Text(error!),
       helper: helper,
       padding: padding,
-      prefix: prefix ?? (label != null ? Text(label!) : null),
+      prefix:
+          prefix ??
+          (label != null
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Text(label!),
+                )
+              : null),
       child: child,
     );
   }

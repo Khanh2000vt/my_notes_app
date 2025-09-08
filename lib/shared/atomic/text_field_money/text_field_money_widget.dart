@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
+import 'package:my_notes_app/utils/string_handle.dart';
 
 class TextFieldMoneyWidget extends StatefulWidget {
   const TextFieldMoneyWidget({
@@ -8,11 +8,13 @@ class TextFieldMoneyWidget extends StatefulWidget {
     this.maxLength,
     this.initialValue,
     required this.onChanged,
+    this.value, // Thêm thuộc tính value
   });
 
   final String? placeholder;
   final int? maxLength;
   final String? initialValue;
+  final String? value; // Thêm thuộc tính value
   final void Function(String?) onChanged;
 
   @override
@@ -21,7 +23,6 @@ class TextFieldMoneyWidget extends StatefulWidget {
 
 class _TextFieldMoneyWidgetState extends State<TextFieldMoneyWidget> {
   late final TextEditingController _controller;
-  final _formatter = NumberFormat("#,###", "vi_VN");
 
   @override
   void initState() {
@@ -35,6 +36,27 @@ class _TextFieldMoneyWidgetState extends State<TextFieldMoneyWidget> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(TextFieldMoneyWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Cập nhật giá trị của controller khi value thay đổi
+    if (widget.value != oldWidget.value) {
+      _onChangeInput(widget.value ?? '');
+    }
+  }
+
+  void _onChangeInput(String value) {
+    String numeric = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (numeric.isEmpty) {
+      return;
+    }
+    String formatted = convertToCurrency(numeric);
+    _controller.value = TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+
   void _onChangeText(String value) {
     String numeric = value.replaceAll(RegExp(r'[^0-9]'), '');
     if (numeric.isEmpty) {
@@ -42,24 +64,28 @@ class _TextFieldMoneyWidgetState extends State<TextFieldMoneyWidget> {
       widget.onChanged('');
       return;
     }
-    String formatted = _formatter.format(int.parse(numeric));
-    _controller.value = TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
+
     widget.onChanged(numeric);
   }
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoTextField.borderless(
+    return CupertinoTextField(
       controller: _controller,
       textAlign: TextAlign.right,
       placeholder: widget.placeholder,
       maxLength: widget.maxLength,
       keyboardType: TextInputType.number,
       onChanged: (val) => _onChangeText(val),
-      suffix: Text('₫'),
+      suffix: Padding(
+        padding: const EdgeInsets.only(right: 8),
+        child: Text('₫'),
+      ),
+      decoration: BoxDecoration(
+        color: CupertinoColors.systemGrey5,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
     );
   }
 }

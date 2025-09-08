@@ -12,45 +12,48 @@ class ReminderMonthlyRoom extends StatelessWidget {
     int selected = (field.value ?? 4);
     final result = await showCupertinoModalPopup(
       context: ctx,
-      builder: (context) => Container(
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        height: 250,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CupertinoButton(
-                  child: Text('Huỷ'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                CupertinoButton(
-                  child: Text('Xong'),
-                  onPressed: () {
-                    Navigator.pop(context, selected);
-                  },
-                ),
-              ],
-            ),
-            Expanded(
-              child: CupertinoPicker(
-                magnification: 1.22,
-                looping: false,
-                squeeze: 1.2,
-                useMagnifier: true,
-                itemExtent: 32,
-                scrollController: FixedExtentScrollController(initialItem: 0),
-                onSelectedItemChanged: (int value) {
-                  selected = value;
-                },
-                children: List<Widget>.generate(28, (int index) {
-                  return Center(child: Text('Ngày ${index + 1}'));
-                }),
+      builder: (context) => CupertinoPopupSurface(
+        isSurfacePainted: true,
+        child: Container(
+          color: CupertinoColors.systemBackground.resolveFrom(context),
+          height: 250,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    child: Text('Huỷ'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  CupertinoButton(
+                    child: Text('Xong'),
+                    onPressed: () {
+                      Navigator.pop(context, selected);
+                    },
+                  ),
+                ],
               ),
-            ),
-          ],
+              Expanded(
+                child: CupertinoPicker(
+                  magnification: 1.22,
+                  looping: false,
+                  squeeze: 1.2,
+                  useMagnifier: true,
+                  itemExtent: 32,
+                  scrollController: FixedExtentScrollController(initialItem: 0),
+                  onSelectedItemChanged: (int value) {
+                    selected = value;
+                  },
+                  children: List<Widget>.generate(28, (int index) {
+                    return Center(child: Text('Ngày ${index + 1}'));
+                  }),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

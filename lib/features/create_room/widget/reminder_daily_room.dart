@@ -13,39 +13,42 @@ class ReminderDailyRoom extends StatelessWidget {
     DateTime selected = (field.value ?? DateTime.now());
     final result = await showCupertinoModalPopup(
       context: ctx,
-      builder: (context) => Container(
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        height: 250,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CupertinoButton(
-                  child: Text('Huỷ'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                CupertinoButton(
-                  child: Text('Xong'),
-                  onPressed: () {
-                    Navigator.pop(context, selected);
-                  },
-                ),
-              ],
-            ),
-            Expanded(
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.time,
-                initialDateTime: selected,
-                use24hFormat: true,
-                onDateTimeChanged: (DateTime value) {
-                  selected = value;
-                },
+      builder: (context) => CupertinoPopupSurface(
+        isSurfacePainted: true,
+        child: Container(
+          color: CupertinoColors.systemBackground.resolveFrom(context),
+          height: 250,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(
+                    child: Text('Huỷ'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  CupertinoButton(
+                    child: Text('Xong'),
+                    onPressed: () {
+                      Navigator.pop(context, selected);
+                    },
+                  ),
+                ],
               ),
-            ),
-          ],
+              Expanded(
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.time,
+                  initialDateTime: selected,
+                  use24hFormat: true,
+                  onDateTimeChanged: (DateTime value) {
+                    selected = value;
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
