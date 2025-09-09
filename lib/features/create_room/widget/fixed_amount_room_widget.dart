@@ -13,17 +13,16 @@ class FixedAmountRoomWidget extends StatelessWidget {
 
   void _onPressedAddFixedAmount(
     BuildContext ctx,
-    FormFieldState<List<CardFixedAmountType>> fieldList,
-    CardFixedAmountType? itemEdit,
+    FormFieldState<List<FixedAmountType>> filed,
+    FixedAmountType? itemEdit,
   ) {
-    void onSaveForm(CardFixedAmountType form) {
-      final newList =
-          replaceOrAddItemsToArrayByKey<CardFixedAmountType, String>(
-            fieldList.value ?? [],
-            [form],
-            (e) => e.id,
-          );
-      fieldList.didChange(newList);
+    void onSaveForm(FixedAmountType form) {
+      final newList = replaceOrAddItemsToArrayByKey<FixedAmountType, String>(
+        filed.value ?? [],
+        [form],
+        (e) => e.id,
+      );
+      filed.didChange(newList);
     }
 
     showCupertinoModalPopup(
@@ -35,7 +34,7 @@ class FixedAmountRoomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FormBuilderField<List<CardFixedAmountType>>(
+    return FormBuilderField<List<FixedAmountType>>(
       name: 'fixed_amounts',
       builder: (field) => CupertinoFormSection.insetGrouped(
         header: const Text("CÁC KHOẢN CỐ ĐỊNH"),
@@ -75,7 +74,7 @@ class CardFixedAmountRoom extends StatelessWidget {
     required this.onRemove,
   });
 
-  final CardFixedAmountType props;
+  final FixedAmountType props;
   final void Function() onEdit;
   final void Function() onRemove;
 
@@ -107,8 +106,8 @@ class ModalPopFixedAmount extends StatefulWidget {
     this.initialValues,
   });
 
-  final void Function(CardFixedAmountType) onSave;
-  final CardFixedAmountType? initialValues;
+  final void Function(FixedAmountType) onSave;
+  final FixedAmountType? initialValues;
 
   @override
   State<ModalPopFixedAmount> createState() => _ModalPopFixedAmountState();
@@ -135,7 +134,7 @@ class _ModalPopFixedAmountState extends State<ModalPopFixedAmount> {
       if (data == null) {
         return;
       }
-      final newItem = CardFixedAmountType(
+      final newItem = FixedAmountType(
         id:
             widget.initialValues?.id ??
             DateTime.now().millisecondsSinceEpoch.toString(),
@@ -161,7 +160,7 @@ class _ModalPopFixedAmountState extends State<ModalPopFixedAmount> {
           child: SafeArea(
             top: false,
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: Column(
                 spacing: 16,
                 mainAxisSize: MainAxisSize.min,
