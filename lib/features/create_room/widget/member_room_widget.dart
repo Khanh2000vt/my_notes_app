@@ -152,8 +152,8 @@ class _ModalPopupMemberState extends State<ModalPopupMember> {
   final formKeyMember = GlobalKey<FormBuilderState>();
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       formKeyMember.currentState?.patchValue({
         'name': widget.initialValues?.name ?? '',

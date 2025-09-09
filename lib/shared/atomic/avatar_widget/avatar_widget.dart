@@ -74,7 +74,6 @@ class _AvatarWidgetState extends State<AvatarWidget> {
               width: size,
               height: size,
               color: CupertinoColors.inactiveGray,
-              child: Icon(Icons.error, size: widget.radius),
             );
           },
         ),

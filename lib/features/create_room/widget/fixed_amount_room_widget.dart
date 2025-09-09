@@ -117,8 +117,8 @@ class _ModalPopFixedAmountState extends State<ModalPopFixedAmount> {
   final formKeyFixed = GlobalKey<FormBuilderState>();
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       formKeyFixed.currentState?.patchValue({
         'name_fixed': widget.initialValues?.label ?? '',
