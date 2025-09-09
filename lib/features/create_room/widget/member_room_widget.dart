@@ -34,6 +34,7 @@ class MemberRoomWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormBuilderField<List<MemberRoomType>>(
       name: 'members',
+      validator: FormBuilderValidators.minLength(1),
       builder: (field) => CupertinoFormSection.insetGrouped(
         header: Text("THÀNH VIÊN: ${field.value?.length ?? 0}"),
         footer: const Text('Nhấn vào thành viên để hiện các tùy chọn sửa, xóa'),
@@ -195,7 +196,9 @@ class _ModalPopupMemberState extends State<ModalPopupMember> {
           ),
           child: FormBuilderField<String>(
             name: 'name',
-            validator: FormBuilderValidators.required(),
+            validator: FormBuilderValidators.required(
+              errorText: 'Vui lòng nhập tên',
+            ),
             builder: (field) => SafeArea(
               top: false,
               child: Padding(

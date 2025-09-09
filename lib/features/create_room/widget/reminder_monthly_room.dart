@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:my_notes_app/shared/atomic/form_row/form_row_widget.dart';
+import 'package:my_notes_app/utils/string_handle.dart';
 
 class ReminderMonthlyRoom extends StatelessWidget {
   const ReminderMonthlyRoom({super.key});
@@ -48,7 +49,9 @@ class ReminderMonthlyRoom extends StatelessWidget {
                     selected = value;
                   },
                   children: List<Widget>.generate(28, (int index) {
-                    return Center(child: Text('Ngày ${index + 1}'));
+                    return Center(
+                      child: Text('Ngày ${formatWithZero(index + 1)}'),
+                    );
                   }),
                 ),
               ),
@@ -93,7 +96,7 @@ class ReminderMonthlyRoom extends StatelessWidget {
                   ),
                   color: CupertinoColors.systemGrey5.resolveFrom(context),
                   child: (Text(
-                    'Ngày ${field.value ?? 1}',
+                    'Ngày ${formatWithZero(field.value ?? 1)}',
                     style: TextStyle(
                       color: CupertinoColors.label.resolveFrom(context),
                     ),

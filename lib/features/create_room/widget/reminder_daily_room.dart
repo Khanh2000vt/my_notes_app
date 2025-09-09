@@ -80,6 +80,11 @@ class ReminderDailyRoom extends StatelessWidget {
               label: 'Thời gian',
               child: FormBuilderField<DateTime>(
                 name: 'time_in_day',
+                initialValue: DateTimeFormat.setTimeToDate(
+                  DateTime.now(),
+                  hour: 22,
+                  minute: 0,
+                ),
                 builder: (field) => CupertinoButton(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,

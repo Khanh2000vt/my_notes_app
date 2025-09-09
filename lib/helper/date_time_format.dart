@@ -8,4 +8,14 @@ class DateTimeFormat {
     }
     return Jiffy.parseFromDateTime(date).format(pattern: 'HH:mm');
   }
+
+  static DateTime setTimeToDate(DateTime date, {int? hour, int? minute}) {
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      hour ?? date.hour,
+      minute ?? date.minute,
+    );
+  }
 }
