@@ -8,14 +8,18 @@ class TextFieldMoneyWidget extends StatefulWidget {
     this.maxLength,
     this.initialValue,
     required this.onChanged,
-    this.value, // Thêm thuộc tính value
+    this.value,
+    this.borderless = false,
+    this.onBlur,
   });
 
   final String? placeholder;
   final int? maxLength;
   final String? initialValue;
-  final String? value; // Thêm thuộc tính value
+  final String? value;
   final void Function(String?) onChanged;
+  final void Function(String?)? onBlur;
+  final bool borderless;
 
   @override
   State<TextFieldMoneyWidget> createState() => _TextFieldMoneyWidgetState();
@@ -23,23 +27,30 @@ class TextFieldMoneyWidget extends StatefulWidget {
 
 class _TextFieldMoneyWidgetState extends State<TextFieldMoneyWidget> {
   late final TextEditingController _controller;
+  final focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.initialValue ?? '');
+    focusNode.addListener(() {
+      if (!focusNode.hasFocus) {
+        String numeric = _controller.text.replaceAll(RegExp(r'[^0-9]'), '');
+        widget.onBlur?.call(numeric.isEmpty ? null : numeric);
+      }
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    focusNode.dispose();
     super.dispose();
   }
 
   @override
   void didUpdateWidget(TextFieldMoneyWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Cập nhật giá trị của controller khi value thay đổi
     if (widget.value != oldWidget.value) {
       _onChangeInput(widget.value ?? '');
     }
@@ -70,8 +81,24 @@ class _TextFieldMoneyWidgetState extends State<TextFieldMoneyWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.borderless) {
+      return CupertinoTextField.borderless(
+        controller: _controller,
+        focusNode: focusNode,
+        textAlign: TextAlign.right,
+        placeholder: widget.placeholder,
+        maxLength: widget.maxLength,
+        keyboardType: TextInputType.number,
+        onChanged: (val) => _onChangeText(val),
+        suffix: Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: Text('₫'),
+        ),
+      );
+    }
     return CupertinoTextField(
       controller: _controller,
+      focusNode: focusNode,
       textAlign: TextAlign.right,
       placeholder: widget.placeholder,
       maxLength: widget.maxLength,

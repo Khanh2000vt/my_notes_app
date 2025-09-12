@@ -1,0 +1,298 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_notes_app/interface/member.dart';
+import 'package:my_notes_app/services/expense.dart';
+import 'package:my_notes_app/shared/atomic/avatar_widget/avatar_widget.dart';
+import 'package:my_notes_app/shared/atomic/form_row/form_row_widget.dart';
+import 'package:my_notes_app/shared/atomic/hide_keybroad/hide_keyboard_widget.dart';
+import 'package:my_notes_app/shared/atomic/text_field_money/text_field_money_widget.dart';
+import 'package:my_notes_app/utils/string_handle.dart';
+
+class AddExpenseScreen extends StatefulWidget {
+  const AddExpenseScreen({super.key, required this.members});
+  final List<Member> members;
+
+  @override
+  State<AddExpenseScreen> createState() => _AddExpenseScreenState();
+}
+
+class _AddExpenseScreenState extends State<AddExpenseScreen> {
+  final _formKey = GlobalKey<FormBuilderState>();
+  bool _isFormValid = false;
+  String amount = '';
+
+  Future<void> _onSave() async {
+    final formState = _formKey.currentState;
+    if (formState == null) {
+      return;
+    }
+    if (formState.saveAndValidate()) {
+      final formData = formState.value;
+      await ExpenseService().upsertExpenseRoom(formData);
+    } else {
+      print('Validation failed');
+    }
+  }
+
+  void _onChanged() {
+    final formState = _formKey.currentState;
+    if (formState == null) return;
+    final isValid = formState.fields.values.every((field) => field.isValid);
+
+    if (isValid != _isFormValid) {
+      setState(() {
+        _isFormValid = isValid;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return HideKeyboardWidget(
+      child: CupertinoPageScaffold(
+        resizeToAvoidBottomInset: true,
+        navigationBar: CupertinoNavigationBar(
+          middle: const Text('Khoản chi'),
+          leading: CupertinoNavigationBarBackButton(
+            previousPageTitle: 'Trở lại',
+            onPressed: () {
+              context.pop();
+            },
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: FormBuilder(
+                    key: _formKey,
+                    onChanged: _onChanged,
+                    child: Column(
+                      children: [
+                        CupertinoFormSection.insetGrouped(
+                          header: Text('Chi tiết'),
+                          children: [
+                            FormBuilderField<String>(
+                              name: 'name',
+                              validator: FormBuilderValidators.required(),
+                              builder: (field) => FormRowWidget(
+                                label: 'Tên',
+                                error: field.errorText,
+                                child: CupertinoTextField.borderless(
+                                  textAlign: TextAlign.right,
+                                  placeholder: "Nhập tên khoản chi",
+                                  maxLength: 100,
+                                  onChanged: field.didChange,
+                                ),
+                              ),
+                            ),
+                            FormBuilderField<String>(
+                              name: 'price',
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                                FormBuilderValidators.integer(),
+                                FormBuilderValidators.positiveNumber(),
+                              ]),
+                              builder: (field) => FormRowWidget(
+                                label: 'Tiền',
+                                error: field.errorText,
+                                child: TextFieldMoneyWidget(
+                                  onBlur: (text) {
+                                    print('onBlur $text');
+                                    setState(() {
+                                      amount = text ?? '';
+                                    });
+                                  },
+                                  value: field.value ?? '',
+                                  onChanged: field.didChange,
+                                  placeholder: 'Nhập số tiền',
+                                  maxLength: 13,
+                                  borderless: true,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        CupertinoFormSection.insetGrouped(
+                          header: Text('Ngày'),
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              height: 140,
+                              child: FormBuilderField<DateTime>(
+                                name: 'date',
+                                validator: FormBuilderValidators.required(),
+                                initialValue: DateTime.now(),
+                                builder: (field) => CupertinoDatePicker(
+                                  initialDateTime: DateTime.now(),
+                                  onDateTimeChanged: field.didChange,
+                                  mode: CupertinoDatePickerMode.date,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        FormBuilderField<List<String>>(
+                          name: 'members',
+                          validator: FormBuilderValidators.minLength(1),
+                          initialValue: widget.members
+                              .map((e) => e.id)
+                              .toList(),
+                          builder: (fieldMembers) => FormBuilderField<String>(
+                            name: 'payer',
+                            initialValue: widget.members.first.id,
+                            builder: (fieldPayer) => RadioGroup<String>(
+                              onChanged: fieldPayer.didChange,
+                              groupValue: fieldPayer.value,
+                              child: CupertinoFormSection.insetGrouped(
+                                header: Text('Người chi và chia sẻ'),
+                                footer: Text(
+                                  'Chọn người trả tiền và các người chia sẻ khoản chi này',
+                                ),
+                                children: widget.members
+                                    .map(
+                                      (member) => CheckboxMember(
+                                        member: member,
+                                        list: fieldMembers.value ?? [],
+                                        onChanged: fieldMembers.didChange,
+                                        payer: fieldPayer.value ?? '',
+                                        amount: amount,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
+                child: Row(
+                  spacing: 12,
+                  children: [
+                    Expanded(
+                      child: CupertinoButton.tinted(
+                        pressedOpacity: 0.9,
+                        onPressed: _isFormValid
+                            ? () {
+                                _onSave();
+                              }
+                            : null,
+                        child: Text('Thêm và tạo mới'),
+                      ),
+                    ),
+                    Expanded(
+                      child: CupertinoButton.filled(
+                        pressedOpacity: 0.9,
+                        onPressed: _isFormValid
+                            ? () {
+                                _onSave();
+                                // context.push(Routes.addExpense);
+                              }
+                            : null,
+                        child: Text('Thêm'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CheckboxMember extends StatelessWidget {
+  const CheckboxMember({
+    super.key,
+    required this.member,
+    required this.list,
+    required this.onChanged,
+    required this.payer,
+    required this.amount,
+  });
+
+  final Member member;
+  final List<String> list;
+  final void Function(List<String>) onChanged;
+  final String payer;
+  final String amount;
+
+  void _onPressed(bool? checked) {
+    final newList = List<String>.from(list);
+    if (checked != null && checked) {
+      newList.add(member.id);
+    } else {
+      newList.remove(member.id);
+    }
+    onChanged(newList);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isChecked = list.contains(member.id);
+    final isPayer = payer == member.id;
+    final amountTb =
+        int.parse(amount.isEmpty ? '0' : amount) /
+        (list.isEmpty ? 1 : list.length);
+    return CupertinoFormRow(
+      key: Key(member.id),
+      child: Row(
+        children: [
+          Transform.scale(
+            scale: 1.5,
+            child: CupertinoRadio<String>(value: member.id, enabled: isChecked),
+          ),
+          SizedBox(width: 12),
+          AvatarWidget(name: member.name),
+          SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  member.name,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color:
+                        (isChecked
+                                ? CupertinoColors.label
+                                : CupertinoColors.secondaryLabel)
+                            .resolveFrom(context),
+                  ),
+                ),
+                Text(
+                  '${convertToCurrency(amountTb.toString())}đ',
+                  style: TextStyle(
+                    color: CupertinoColors.placeholderText.resolveFrom(context),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 12),
+          Transform.scale(
+            scale: 1.4,
+            child: CupertinoCheckbox(
+              value: isChecked,
+              onChanged: isPayer ? null : _onPressed,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

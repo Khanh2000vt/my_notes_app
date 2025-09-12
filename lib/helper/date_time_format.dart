@@ -18,4 +18,18 @@ class DateTimeFormat {
       minute ?? date.minute,
     );
   }
+
+  static String? dateToTimestampUTC(DateTime? date) {
+    if (date == null) {
+      return null;
+    }
+    return date.toUtc().toIso8601String();
+  }
+
+  static String dateToDate(DateTime? date) {
+    if (date == null) {
+      return '--/--/----';
+    }
+    return Jiffy.parseFromDateTime(date).format(pattern: 'dd/MM/yyyy');
+  }
 }

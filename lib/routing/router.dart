@@ -1,8 +1,12 @@
 // Cấu hình GoRouter
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_notes_app/features/create_room/widget/create_room_screen.dart';
+import 'package:my_notes_app/features/room/add_expense/widget/add_expense_screen.dart';
+import 'package:my_notes_app/features/room/create_room/widget/create_room_screen.dart';
 import 'package:my_notes_app/features/home/widgets/home_screen.dart';
+import 'package:my_notes_app/features/room/room/widget/room_screen.dart';
+import 'package:my_notes_app/interface/member.dart';
 import 'package:my_notes_app/routing/routes.dart';
 
 import '../features/auth/login/login_screen.dart';
@@ -11,7 +15,7 @@ final ValueNotifier<String?> authToken = ValueNotifier(null);
 
 final router = GoRouter(
   refreshListenable: authToken,
-  initialLocation: Routes.createRoom,
+  initialLocation: Routes.room,
   redirect: (context, state) {
     return null;
     // final String? token = authToken.value;
@@ -45,9 +49,22 @@ final router = GoRouter(
       },
     ),
     GoRoute(
+      path: Routes.room,
+      builder: (context, state) {
+        return RoomScreen();
+      },
+    ),
+    GoRoute(
       path: Routes.createRoom,
       builder: (context, state) {
         return CreateRoomScreen();
+      },
+    ),
+    GoRoute(
+      path: Routes.addExpense,
+      builder: (context, state) {
+        final members = state.extra as List<Member>? ?? [];
+        return AddExpenseScreen(members: members);
       },
     ),
   ],

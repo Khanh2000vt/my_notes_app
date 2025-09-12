@@ -60,7 +60,6 @@ class _AvatarWidgetState extends State<AvatarWidget> {
           height: size,
           fit: BoxFit.cover,
           loadingBuilder: (context, child, loadingProgress) {
-            print('loadingProgress: $loadingProgress');
             if (loadingProgress == null) return child;
             return Center(
               child: CupertinoActivityIndicator(
