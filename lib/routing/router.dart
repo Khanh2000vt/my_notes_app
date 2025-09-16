@@ -2,10 +2,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_notes_app/features/room/add_expense/widget/add_expense_screen.dart';
+import 'package:my_notes_app/features/room/add_expense/add_expense_screen.dart';
 import 'package:my_notes_app/features/room/create_room/widget/create_room_screen.dart';
 import 'package:my_notes_app/features/home/widgets/home_screen.dart';
-import 'package:my_notes_app/features/room/room/widget/room_screen.dart';
+import 'package:my_notes_app/features/room/room/room_screen.dart';
+import 'package:my_notes_app/features/room/summary_expense/summary_expense_screen.dart';
 import 'package:my_notes_app/interface/member.dart';
 import 'package:my_notes_app/routing/routes.dart';
 
@@ -15,7 +16,7 @@ final ValueNotifier<String?> authToken = ValueNotifier(null);
 
 final router = GoRouter(
   refreshListenable: authToken,
-  initialLocation: Routes.room,
+  initialLocation: Routes.summaryExpense,
   redirect: (context, state) {
     return null;
     // final String? token = authToken.value;
@@ -65,6 +66,12 @@ final router = GoRouter(
       builder: (context, state) {
         final members = state.extra as List<Member>? ?? [];
         return AddExpenseScreen(members: members);
+      },
+    ),
+    GoRoute(
+      path: Routes.summaryExpense,
+      builder: (context, state) {
+        return SummaryExpenseScreen();
       },
     ),
   ],

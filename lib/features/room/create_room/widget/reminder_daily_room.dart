@@ -30,7 +30,7 @@ class ReminderDailyRoom extends StatelessWidget {
                     },
                   ),
                   CupertinoButton(
-                    child: Text('Xong'),
+                    child: Text('Chọn'),
                     onPressed: () {
                       Navigator.pop(context, selected);
                     },

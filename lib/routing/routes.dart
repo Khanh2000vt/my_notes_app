@@ -5,4 +5,5 @@ abstract final class Routes {
   static const String room = '/room';
   static const String createRoom = '/create-room';
   static const String addExpense = '/add-expense';
+  static const String summaryExpense = '/summary-expense';
 }

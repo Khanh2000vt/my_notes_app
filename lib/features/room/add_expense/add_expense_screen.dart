@@ -81,7 +81,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                               name: 'name',
                               validator: FormBuilderValidators.required(),
                               builder: (field) => FormRowWidget(
-                                label: 'Tên',
+                                label: 'Loại tiền',
                                 error: field.errorText,
                                 child: CupertinoTextField.borderless(
                                   textAlign: TextAlign.right,

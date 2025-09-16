@@ -32,4 +32,10 @@ class DateTimeFormat {
     }
     return Jiffy.parseFromDateTime(date).format(pattern: 'dd/MM/yyyy');
   }
+
+  static String formatMonthYear(DateTime date) {
+    final month = date.month.toString().padLeft(2, '0');
+    final year = date.year;
+    return 'Tháng $month năm $year';
+  }
 }
