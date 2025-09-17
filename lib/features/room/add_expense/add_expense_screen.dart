@@ -164,16 +164,16 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                             ),
                           ],
                         ),
-                        FormBuilderField<List<String>>(
+                        FormBuilderField<List<int>>(
                           name: 'members',
                           validator: FormBuilderValidators.minLength(1),
                           initialValue: widget.members
                               .map((e) => e.id)
                               .toList(),
-                          builder: (fieldMembers) => FormBuilderField<String>(
+                          builder: (fieldMembers) => FormBuilderField<int>(
                             name: 'payer',
                             initialValue: widget.members.first.id,
-                            builder: (fieldPayer) => RadioGroup<String>(
+                            builder: (fieldPayer) => RadioGroup<int>(
                               onChanged: fieldPayer.didChange,
                               groupValue: fieldPayer.value,
                               child: CupertinoFormSection.insetGrouped(
@@ -187,7 +187,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                         member: member,
                                         list: fieldMembers.value ?? [],
                                         onChanged: fieldMembers.didChange,
-                                        payer: fieldPayer.value ?? '',
+                                        payer: fieldPayer.value ?? 0,
                                         amount: amount,
                                       ),
                                     )
@@ -251,13 +251,13 @@ class CheckboxMember extends StatelessWidget {
   });
 
   final Member member;
-  final List<String> list;
-  final void Function(List<String>) onChanged;
-  final String payer;
+  final List<int> list;
+  final void Function(List<int>) onChanged;
+  final int payer;
   final String amount;
 
   void _onPressed(bool? checked) {
-    final newList = List<String>.from(list);
+    final newList = List<int>.from(list);
     if (checked != null && checked) {
       newList.add(member.id);
     } else {
@@ -274,15 +274,15 @@ class CheckboxMember extends StatelessWidget {
         int.parse(amount.isEmpty ? '0' : amount) /
         (list.isEmpty ? 1 : list.length);
     return CupertinoFormRow(
-      key: Key(member.id),
+      key: Key(member.id.toString()),
       child: Row(
         children: [
           Transform.scale(
             scale: 1.5,
-            child: CupertinoRadio<String>(value: member.id, enabled: isChecked),
+            child: CupertinoRadio<int>(value: member.id, enabled: isChecked),
           ),
           SizedBox(width: 12),
-          AvatarWidget(name: member.id),
+          AvatarWidget(name: member.id.toString()),
           SizedBox(width: 12),
           Expanded(
             child: Column(

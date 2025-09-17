@@ -10,7 +10,7 @@ class ExpenseService {
   }
 
   Future<List<Expense>> fetchExpensesDateTimeByRoomId(
-    String roomId,
+    int roomId,
     DateTime date,
   ) async {
     final startOfMonth = DateTime(date.year, date.month, 1);
@@ -67,7 +67,7 @@ class ExpenseService {
           .delete()
           .eq('expense_id', expenseId);
     }
-    final participants = formData['members'] as List<String>;
+    final participants = formData['members'] as List<int>;
     final amount = formData['price'] as String? ?? '0';
     final amountTb =
         int.parse(amount.isEmpty ? '0' : amount) /
@@ -87,7 +87,7 @@ class ExpenseService {
 
   Future<ExpenseSummary> fetchRoomExpenseSummary(
     DateTime date,
-    String roomId,
+    int roomId,
   ) async {
     final response = await supabase.rpc(
       'get_room_expense_summary',

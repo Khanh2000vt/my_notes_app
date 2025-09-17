@@ -7,7 +7,7 @@ class RoomService {
     supabase = Supabase.instance.client;
   }
 
-  Future<Room?> fetchRoomDetail(String roomId) async {
+  Future<Room?> fetchRoomDetail(int roomId) async {
     final response = await supabase
         .from('rooms')
         .select('*, members(*)')

@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart';
 class ModalPopupApp {
   ModalPopupApp._();
 
-  static Future<T?> _modalPopup<T>({
+  static Future<T?> modalPopup<T>({
     required BuildContext ctx,
+    required T initValue,
+    double height = 250,
+    bool hideHeader = false,
     required Widget Function(BuildContext context, Function(T value) onChanged)
     child,
-    required T initValue,
   }) async {
     T selected = initValue;
     final result = await showCupertinoModalPopup<T>(
@@ -16,26 +18,27 @@ class ModalPopupApp {
         isSurfacePainted: true,
         child: Container(
           color: CupertinoColors.systemBackground.resolveFrom(context),
-          height: 250,
+          height: height,
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CupertinoButton(
-                    child: Text('Huỷ'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  CupertinoButton(
-                    child: Text('Chọn'),
-                    onPressed: () {
-                      Navigator.pop(context, selected);
-                    },
-                  ),
-                ],
-              ),
+              if (!hideHeader)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CupertinoButton(
+                      child: Text('Huỷ'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    CupertinoButton(
+                      child: Text('Chọn'),
+                      onPressed: () {
+                        Navigator.pop(context, selected);
+                      },
+                    ),
+                  ],
+                ),
               Expanded(
                 child: child(context, (T value) {
                   selected = value;
@@ -55,7 +58,7 @@ class ModalPopupApp {
     required void Function(DateTime value) onChanged,
     CupertinoDatePickerMode mode = CupertinoDatePickerMode.dateAndTime,
   }) async {
-    final result = await _modalPopup<DateTime>(
+    final result = await modalPopup<DateTime>(
       ctx: context,
       initValue: value,
       child: (context, onDateTimeChanged) {
@@ -77,7 +80,7 @@ class ModalPopupApp {
     required void Function(int value) onChanged,
     required List<Widget> items,
   }) async {
-    final result = await _modalPopup<int>(
+    final result = await modalPopup<int>(
       ctx: context,
       initValue: value,
       child: (context, onChangedSelect) {

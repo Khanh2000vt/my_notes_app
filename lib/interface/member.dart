@@ -1,28 +1,25 @@
 class Member {
-  final String id;
+  final int id;
   final String name;
-  final String roomId;
-  final String userId;
+  final int roomId;
   final DateTime? birthDay;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final bool? own;
 
   Member({
     required this.id,
     required this.name,
     required this.roomId,
-    required this.userId,
     this.birthDay,
-    required this.createdAt,
-    this.own, // Updated constructor
+    this.createdAt,
+    this.own,
   });
 
   factory Member.fromJson(Map<String, dynamic> json) {
     return Member(
-      id: json['id'] as String,
+      id: json['id'] as int,
       name: json['name'] as String,
-      roomId: json['room_id'] as String,
-      userId: json['user_id'] as String,
+      roomId: json['room_id'] as int,
       birthDay: json['birth_day'] != null
           ? DateTime.tryParse(json['birth_day'] as String)
           : null,
@@ -36,9 +33,8 @@ class Member {
       'id': id,
       'name': name,
       'room_id': roomId,
-      'user_id': userId,
       'birth_day': birthDay?.toIso8601String(),
-      'created_at': createdAt.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
       'own': own,
     };
   }

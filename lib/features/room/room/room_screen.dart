@@ -19,7 +19,7 @@ class RoomScreen extends StatefulWidget {
 }
 
 class _RoomScreenState extends State<RoomScreen> {
-  final roomId = '027bd95f-e964-4589-98a7-981990fcc9d0';
+  final roomId = 1;
   late Future<Room?> _futureRoom;
   late Future<List<Expense>?> _futureExpense;
   DateTime selectedDate = DateTime.now();
