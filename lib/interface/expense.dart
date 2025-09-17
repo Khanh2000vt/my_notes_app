@@ -1,18 +1,16 @@
-import 'package:uuid/uuid.dart';
-
 class Expense {
-  final String id;
+  final int? id;
   final DateTime createdAt;
-  final String? name;
+  final int category;
   final num? amount;
   final DateTime? date;
-  final String? roomId;
-  final String? payerId;
+  final int? roomId;
+  final int? payerId;
 
   Expense({
     required this.id,
     required this.createdAt,
-    this.name,
+    required this.category,
     this.amount,
     this.date,
     this.roomId,
@@ -22,13 +20,13 @@ class Expense {
   /// Convert JSON -> Expenses
   factory Expense.fromJson(Map<String, dynamic> json) {
     return Expense(
-      id: json['id'] as String,
+      id: json['id'] as int,
       createdAt: DateTime.parse(json['created_at']),
-      name: json['name'] as String?,
+      category: json['category'] as int,
       amount: json['amount'] as num?,
       date: json['date'] != null ? DateTime.parse(json['date']) : null,
-      roomId: json['room_id'] as String?,
-      payerId: json['payer_id'] as String?,
+      roomId: json['room_id'] != null ? json['room_id'] as int : null,
+      payerId: json['payer_id'] != null ? json['payer_id'] as int : null,
     );
   }
 
@@ -37,7 +35,7 @@ class Expense {
     return {
       'id': id,
       'created_at': createdAt.toUtc().toIso8601String(),
-      'name': name,
+      'category': category,
       'amount': amount,
       'date': date?.toUtc().toIso8601String(),
       'room_id': roomId,
@@ -47,17 +45,17 @@ class Expense {
 
   /// Factory để tạo mới record với id random
   factory Expense.newExpense({
-    String? id,
-    String? name,
+    int? id,
+    required int category,
     num? amount,
     DateTime? date,
-    String? roomId,
-    String? payerId,
+    int? roomId,
+    int? payerId,
   }) {
     return Expense(
-      id: id ?? const Uuid().v4(),
+      id: null,
       createdAt: DateTime.now().toUtc(),
-      name: name,
+      category: category,
       amount: amount,
       date: date,
       roomId: roomId,

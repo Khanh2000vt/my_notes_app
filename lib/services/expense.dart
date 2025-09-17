@@ -1,4 +1,5 @@
 import 'package:my_notes_app/interface/expense.dart';
+import 'package:my_notes_app/interface/expense_summary.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ExpenseService {
@@ -29,14 +30,14 @@ class ExpenseService {
   }
 
   Future<void> upsertExpenseRoom(Map<String, dynamic> formData) async {
-    String? expenseId = formData['id'];
+    int? expenseId = formData['id'];
     if (expenseId == null) {
       // Tạo mới
       Expense newExpense = Expense.newExpense(
-        name: formData['name'] as String?,
+        category: formData['category'] as int? ?? 0,
         amount: int.tryParse(formData['price'] ?? '0'),
         date: formData['date'] as DateTime?,
-        roomId: '027bd95f-e964-4589-98a7-981990fcc9d0',
+        roomId: 1,
         payerId: formData['payer'],
       );
       final res = await supabase
@@ -44,15 +45,15 @@ class ExpenseService {
           .insert(newExpense.toJson())
           .select()
           .single();
-      expenseId = res['id'] as String;
+      expenseId = res['id'] as int;
     } else {
       // Cập nhật
       Expense newExpense = Expense.newExpense(
         id: expenseId,
-        name: formData['name'] as String?,
+        category: formData['category'] as int? ?? 0,
         amount: int.tryParse(formData['price'] ?? '0'),
         date: formData['date'] as DateTime?,
-        roomId: '027bd95f-e964-4589-98a7-981990fcc9d0',
+        roomId: 1,
         payerId: formData['payer'],
       );
       await supabase
@@ -82,5 +83,20 @@ class ExpenseService {
         )
         .toList();
     await supabase.from('expense_shares').insert(newShares).select();
+  }
+
+  Future<ExpenseSummary> fetchRoomExpenseSummary(
+    DateTime date,
+    String roomId,
+  ) async {
+    final response = await supabase.rpc(
+      'get_room_expense_summary',
+      params: {'target_date': date.toIso8601String(), 'target_room': roomId},
+    );
+
+    if (response == null) {
+      return ExpenseSummary(byCategory: [], expenseMember: [], total: 0);
+    }
+    return ExpenseSummary.fromJson(response);
   }
 }

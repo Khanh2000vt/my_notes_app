@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_notes_app/enums/category_expense.dart';
 import 'package:my_notes_app/interface/member.dart';
 import 'package:my_notes_app/services/expense.dart';
 import 'package:my_notes_app/shared/atomic/avatar_widget/avatar_widget.dart';
 import 'package:my_notes_app/shared/atomic/form_row/form_row_widget.dart';
 import 'package:my_notes_app/shared/atomic/hide_keybroad/hide_keyboard_widget.dart';
 import 'package:my_notes_app/shared/atomic/text_field_money/text_field_money_widget.dart';
+import 'package:my_notes_app/shared/molecular/modal_popup/modal_popup.dart';
 import 'package:my_notes_app/utils/string_handle.dart';
 
 class AddExpenseScreen extends StatefulWidget {
@@ -20,6 +22,7 @@ class AddExpenseScreen extends StatefulWidget {
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
+  final categories = CategoryExpense.values;
   bool _isFormValid = false;
   String amount = '';
 
@@ -77,17 +80,42 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         CupertinoFormSection.insetGrouped(
                           header: Text('Chi tiết'),
                           children: [
-                            FormBuilderField<String>(
-                              name: 'name',
+                            FormBuilderField<int>(
+                              name: 'category',
+                              initialValue: 0,
                               validator: FormBuilderValidators.required(),
                               builder: (field) => FormRowWidget(
                                 label: 'Loại tiền',
+
                                 error: field.errorText,
-                                child: CupertinoTextField.borderless(
-                                  textAlign: TextAlign.right,
-                                  placeholder: "Nhập tên khoản chi",
-                                  maxLength: 100,
-                                  onChanged: field.didChange,
+                                child: CupertinoButton(
+                                  pressedOpacity: 0.8,
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 0,
+                                    horizontal: 12,
+                                  ),
+                                  child: Text(
+                                    categories[field.value ?? 0].label,
+                                  ),
+                                  onPressed: () {
+                                    ModalPopupApp.select(
+                                      context: context,
+                                      value: field.value ?? 0,
+                                      onChanged: field.didChange,
+                                      items: categories
+                                          .map(
+                                            (e) => Center(
+                                              child: Text(
+                                                e.label,
+                                                style: const TextStyle(
+                                                  fontSize: 18,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                          .toList(),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
@@ -103,7 +131,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                 error: field.errorText,
                                 child: TextFieldMoneyWidget(
                                   onBlur: (text) {
-                                    print('onBlur $text');
                                     setState(() {
                                       amount = text ?? '';
                                     });
@@ -119,7 +146,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           ],
                         ),
                         CupertinoFormSection.insetGrouped(
-                          header: Text('Ngày'),
+                          header: Text('Thời gian'),
                           children: [
                             SizedBox(
                               width: double.infinity,
@@ -255,7 +282,7 @@ class CheckboxMember extends StatelessWidget {
             child: CupertinoRadio<String>(value: member.id, enabled: isChecked),
           ),
           SizedBox(width: 12),
-          AvatarWidget(name: member.name),
+          AvatarWidget(name: member.id),
           SizedBox(width: 12),
           Expanded(
             child: Column(

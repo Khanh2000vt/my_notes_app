@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:my_notes_app/enums/category_expense.dart';
 import 'package:my_notes_app/helper/date_time_format.dart';
 import 'package:my_notes_app/interface/expense.dart';
 import 'package:my_notes_app/shared/atomic/avatar_widget/avatar_widget.dart';
@@ -35,7 +36,7 @@ class ListExpenseWidget extends StatelessWidget {
             final item = snapshot.data![index];
             return CupertinoListTile(
               title: Text(
-                item.name ?? '_',
+                CategoryExpense.labelFromValue(item.category),
                 maxLines: 1,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
@@ -49,7 +50,7 @@ class ListExpenseWidget extends StatelessWidget {
                 ),
               ),
               trailing: const CupertinoListTileChevron(),
-              leading: AvatarWidget(name: item.name ?? ''),
+              leading: AvatarWidget(name: item.payerId?.toString() ?? ''),
               backgroundColor:
                   (index % 2 == 0
                           ? CupertinoColors.secondarySystemBackground

@@ -5,6 +5,7 @@ class Member {
   final String userId;
   final DateTime? birthDay;
   final DateTime createdAt;
+  final bool? own;
 
   Member({
     required this.id,
@@ -13,6 +14,7 @@ class Member {
     required this.userId,
     this.birthDay,
     required this.createdAt,
+    this.own, // Updated constructor
   });
 
   factory Member.fromJson(Map<String, dynamic> json) {
@@ -25,6 +27,7 @@ class Member {
           ? DateTime.tryParse(json['birth_day'] as String)
           : null,
       createdAt: DateTime.parse(json['created_at'] as String),
+      own: json['own'] as bool?,
     );
   }
 
@@ -36,6 +39,7 @@ class Member {
       'user_id': userId,
       'birth_day': birthDay?.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
+      'own': own,
     };
   }
 }

@@ -70,4 +70,31 @@ class ModalPopupApp {
       onChanged(result);
     }
   }
+
+  static Future<void> select({
+    required BuildContext context,
+    required int value,
+    required void Function(int value) onChanged,
+    required List<Widget> items,
+  }) async {
+    final result = await _modalPopup<int>(
+      ctx: context,
+      initValue: value,
+      child: (context, onChangedSelect) {
+        return CupertinoPicker(
+          magnification: 1.22,
+          looping: true,
+          squeeze: 1.2,
+          useMagnifier: true,
+          itemExtent: 32,
+          scrollController: FixedExtentScrollController(initialItem: value),
+          onSelectedItemChanged: onChangedSelect,
+          children: items,
+        );
+      },
+    );
+    if (result != null && result != value) {
+      onChanged(result);
+    }
+  }
 }

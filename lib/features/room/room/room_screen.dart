@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_notes_app/features/room/room/widget/header_sticky_widget.dart';
 import 'package:my_notes_app/features/room/room/widget/list_expense_widget.dart';
 import 'package:my_notes_app/interface/expense.dart';
 import 'package:my_notes_app/interface/room.dart';
+import 'package:my_notes_app/routing/routes.dart';
 import 'package:my_notes_app/services/expense.dart';
 import 'package:my_notes_app/services/room.dart';
 import 'package:my_notes_app/shared/atomic/sticky_header_delegate/sticky_header_delegate.dart';
@@ -101,7 +103,9 @@ class _RoomScreenState extends State<RoomScreen> {
                     child: CupertinoButton.tinted(
                       pressedOpacity: 0.9,
                       child: Text('Tổng kết'),
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push(Routes.summaryExpense);
+                      },
                     ),
                   ),
                 ),

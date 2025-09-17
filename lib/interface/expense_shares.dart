@@ -1,7 +1,7 @@
 class ExpenseShare {
   final DateTime createdAt;
-  final String memberId;
-  final String expenseId;
+  final int memberId;
+  final int expenseId;
   final num shareAmount;
 
   ExpenseShare({
@@ -14,8 +14,8 @@ class ExpenseShare {
   factory ExpenseShare.fromJson(Map<String, dynamic> map) {
     return ExpenseShare(
       createdAt: DateTime.parse(map['created_at'] as String),
-      memberId: map['member_id'] as String,
-      expenseId: map['expense_id'] as String,
+      memberId: map['member_id'] as int,
+      expenseId: map['expense_id'] as int,
       shareAmount: map['share_amount'] as num,
     );
   }
@@ -31,8 +31,8 @@ class ExpenseShare {
 
   ExpenseShare copyWith({
     DateTime? createdAt,
-    String? memberId,
-    String? expenseId,
+    int? memberId,
+    int? expenseId,
     num? shareAmount,
   }) {
     return ExpenseShare(
