@@ -1,18 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_notes_app/enums/category_expense.dart';
 import 'package:my_notes_app/helper/date_time_format.dart';
-import 'package:my_notes_app/interface/expense.dart';
+import 'package:my_notes_app/interface/expense_room.dart';
 import 'package:my_notes_app/shared/atomic/avatar_widget/avatar_widget.dart';
 import 'package:my_notes_app/utils/string_handle.dart';
 
 class ListExpenseWidget extends StatelessWidget {
-  const ListExpenseWidget({super.key, required this.futureExpense});
+  const ListExpenseWidget({
+    super.key,
+    required this.futureExpense,
+    required this.onTapExpense,
+  });
 
-  final Future<List<Expense>?> futureExpense;
+  final Future<List<ExpenseRoom>?> futureExpense;
+  final void Function(ExpenseRoom expenseRoom) onTapExpense;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Expense>?>(
+    return FutureBuilder<List<ExpenseRoom>?>(
       future: futureExpense,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -35,6 +40,7 @@ class ListExpenseWidget extends StatelessWidget {
           delegate: SliverChildBuilderDelegate((context, index) {
             final item = snapshot.data![index];
             return CupertinoListTile(
+              onTap: () => onTapExpense(item),
               title: Text(
                 CategoryExpense.labelFromValue(item.category),
                 maxLines: 1,
@@ -50,7 +56,7 @@ class ListExpenseWidget extends StatelessWidget {
                 ),
               ),
               trailing: const CupertinoListTileChevron(),
-              leading: AvatarWidget(name: item.payerId?.toString() ?? ''),
+              leading: AvatarWidget(name: item.payerId.toString()),
               backgroundColor:
                   (index % 2 == 0
                           ? CupertinoColors.secondarySystemBackground

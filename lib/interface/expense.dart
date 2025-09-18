@@ -37,7 +37,7 @@ class Expense {
       if (createdAt != null) 'created_at': createdAt!.toUtc().toIso8601String(),
       'category': category,
       'amount': amount,
-      'date': date?.toUtc().toIso8601String(),
+      'date': date?.toIso8601String(),
       'room_id': roomId,
       'payer_id': payerId,
     };
@@ -53,7 +53,6 @@ class Expense {
     int? payerId,
   }) {
     return Expense(
-      createdAt: DateTime.now().toUtc(),
       category: category,
       amount: amount,
       date: date,

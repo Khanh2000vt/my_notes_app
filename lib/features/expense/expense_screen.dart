@@ -3,6 +3,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_notes_app/enums/category_expense.dart';
+import 'package:my_notes_app/features/expense/model/expense_form_model.dart';
+import 'package:my_notes_app/features/expense/model/expense_model.dart';
 import 'package:my_notes_app/interface/member.dart';
 import 'package:my_notes_app/services/expense.dart';
 import 'package:my_notes_app/shared/atomic/avatar_widget/avatar_widget.dart';
@@ -13,8 +15,8 @@ import 'package:my_notes_app/shared/molecular/modal_popup/modal_popup.dart';
 import 'package:my_notes_app/utils/string_handle.dart';
 
 class ExpenseScreen extends StatefulWidget {
-  const ExpenseScreen({super.key, required this.members});
-  final List<Member> members;
+  const ExpenseScreen({super.key, required this.model});
+  final ExpenseModel model;
 
   @override
   State<ExpenseScreen> createState() => _ExpenseScreenState();
@@ -25,6 +27,16 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   final categories = CategoryExpense.values;
   bool _isFormValid = false;
   String amount = '';
+  Map<String, dynamic> initialData = {};
+
+  @override
+  initState() {
+    super.initState();
+    setState(() {
+      amount = widget.model.expense?.amount.toString() ?? '';
+      _isFormValid = widget.model.expense != null;
+    });
+  }
 
   Future<void> _onSave({bool? isSave}) async {
     final formState = _formKey.currentState;
@@ -33,8 +45,19 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     }
     if (formState.saveAndValidate()) {
       final formData = formState.value;
-      await ExpenseService().upsertExpenseRoom(formData);
+      final expense = widget.model.expense;
+      ExpenseService().upsertExpenseRoom(
+        ExpenseFormModel(
+          id: expense?.id,
+          category: formData['category'] as int,
+          price: formData['price'] as String,
+          date: formData['date'],
+          payer: formData['payer'] as int,
+          members: List<int>.from(formData['members'] as List<dynamic>),
+        ),
+      );
       if (isSave == true) {
+        if (!mounted) return;
         context.pop();
       } else {
         formState.reset();
@@ -89,7 +112,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                           children: [
                             FormBuilderField<int>(
                               name: 'category',
-                              initialValue: 0,
+                              initialValue: widget.model.expense?.category ?? 0,
                               validator: FormBuilderValidators.required(),
                               builder: (field) => FormRowWidget(
                                 label: 'Loại tiền',
@@ -128,27 +151,32 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                             ),
                             FormBuilderField<String>(
                               name: 'price',
+                              initialValue:
+                                  widget.model.expense?.amount.toString() ?? '',
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(),
                                 FormBuilderValidators.integer(),
                                 FormBuilderValidators.positiveNumber(),
                               ]),
-                              builder: (field) => FormRowWidget(
-                                label: 'Tiền',
-                                error: field.errorText,
-                                child: TextFieldMoneyWidget(
-                                  onBlur: (text) {
-                                    setState(() {
-                                      amount = text ?? '';
-                                    });
-                                  },
-                                  value: field.value ?? '',
-                                  onChanged: field.didChange,
-                                  placeholder: 'Nhập số tiền',
-                                  maxLength: 13,
-                                  borderless: true,
-                                ),
-                              ),
+                              builder: (field) {
+                                return FormRowWidget(
+                                  label: 'Tiền',
+                                  error: field.errorText,
+                                  child: TextFieldMoneyWidget(
+                                    onBlur: (text) {
+                                      setState(() {
+                                        amount = text ?? '';
+                                      });
+                                    },
+                                    value: field.value ?? '',
+                                    initialValue: field.value ?? '',
+                                    onChanged: field.didChange,
+                                    placeholder: 'Nhập số tiền',
+                                    maxLength: 13,
+                                    borderless: true,
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -160,27 +188,37 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                               height: 140,
                               child: FormBuilderField<DateTime>(
                                 name: 'date',
+                                initialValue:
+                                    widget.model.expense?.date ??
+                                    DateTime.now(),
                                 validator: FormBuilderValidators.required(),
-                                initialValue: DateTime.now(),
-                                builder: (field) => CupertinoDatePicker(
-                                  initialDateTime: DateTime.now(),
-                                  onDateTimeChanged: field.didChange,
-                                  mode: CupertinoDatePickerMode.date,
-                                  maximumDate: DateTime.now(),
-                                ),
+                                builder: (field) {
+                                  return CupertinoDatePicker(
+                                    initialDateTime:
+                                        widget.model.expense?.date ??
+                                        DateTime.now(),
+                                    onDateTimeChanged: field.didChange,
+                                    mode: CupertinoDatePickerMode.date,
+                                    maximumDate: DateTime.now(),
+                                  );
+                                },
                               ),
                             ),
                           ],
                         ),
                         FormBuilderField<List<int>>(
                           name: 'members',
+                          initialValue: widget.model.expense != null
+                              ? widget.model.expense!.shares
+                                    .map((e) => e.id)
+                                    .toList()
+                              : widget.model.members.map((e) => e.id).toList(),
                           validator: FormBuilderValidators.minLength(1),
-                          initialValue: widget.members
-                              .map((e) => e.id)
-                              .toList(),
                           builder: (fieldMembers) => FormBuilderField<int>(
                             name: 'payer',
-                            initialValue: widget.members.first.id,
+                            initialValue:
+                                widget.model.expense?.payerId ??
+                                widget.model.members.first.id,
                             builder: (fieldPayer) => RadioGroup<int>(
                               onChanged: fieldPayer.didChange,
                               groupValue: fieldPayer.value,
@@ -189,7 +227,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                                 footer: Text(
                                   'Chọn người trả tiền và các người chia sẻ khoản chi này',
                                 ),
-                                children: widget.members
+                                children: widget.model.members
                                     .map(
                                       (member) => CheckboxMember(
                                         member: member,
@@ -209,35 +247,49 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   ),
                 ),
               ),
+
               Padding(
                 padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
-                child: Row(
-                  spacing: 12,
-                  children: [
-                    Expanded(
-                      child: CupertinoButton.tinted(
-                        pressedOpacity: 0.9,
-                        onPressed: _isFormValid
-                            ? () {
-                                _onSave();
-                              }
-                            : null,
-                        child: Text('Thêm và tạo mới'),
+                child: widget.model.expense != null
+                    ? SizedBox(
+                        width: double.infinity,
+                        child: CupertinoButton.filled(
+                          pressedOpacity: 0.9,
+                          onPressed: _isFormValid
+                              ? () {
+                                  _onSave(isSave: true);
+                                }
+                              : null,
+                          child: Text('Cập nhật'),
+                        ),
+                      )
+                    : Row(
+                        spacing: 12,
+                        children: [
+                          Expanded(
+                            child: CupertinoButton.tinted(
+                              pressedOpacity: 0.9,
+                              onPressed: _isFormValid
+                                  ? () {
+                                      _onSave();
+                                    }
+                                  : null,
+                              child: Text('Thêm và tạo mới'),
+                            ),
+                          ),
+                          Expanded(
+                            child: CupertinoButton.filled(
+                              pressedOpacity: 0.9,
+                              onPressed: _isFormValid
+                                  ? () {
+                                      _onSave(isSave: true);
+                                    }
+                                  : null,
+                              child: Text('Thêm'),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Expanded(
-                      child: CupertinoButton.filled(
-                        pressedOpacity: 0.9,
-                        onPressed: _isFormValid
-                            ? () {
-                                _onSave(isSave: true);
-                              }
-                            : null,
-                        child: Text('Thêm'),
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
@@ -307,13 +359,16 @@ class CheckboxMember extends StatelessWidget {
                             .resolveFrom(context),
                   ),
                 ),
-                Text(
-                  '${convertToCurrency(amountTb.toString())}đ',
-                  style: TextStyle(
-                    color: CupertinoColors.placeholderText.resolveFrom(context),
-                    fontSize: 12,
+                if (isChecked)
+                  Text(
+                    '${convertToCurrency(amountTb.toString())}đ',
+                    style: TextStyle(
+                      color: CupertinoColors.placeholderText.resolveFrom(
+                        context,
+                      ),
+                      fontSize: 12,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

@@ -4,8 +4,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_notes_app/features/summary_expense/widget/check_widget.dart';
-import 'package:my_notes_app/features/summary_expense/widget/config_export_widget.dart';
+import 'package:my_notes_app/features/summary/widget/check_widget.dart';
+import 'package:my_notes_app/features/summary/widget/config_export_widget.dart';
 import 'package:my_notes_app/helper/date_time_format.dart';
 import 'package:my_notes_app/interface/expense_summary.dart';
 import 'package:my_notes_app/services/expense.dart';
@@ -14,14 +14,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
-class SummaryExpenseScreen extends StatefulWidget {
-  const SummaryExpenseScreen({super.key});
+class SummaryScreen extends StatefulWidget {
+  const SummaryScreen({super.key});
 
   @override
-  State<SummaryExpenseScreen> createState() => _SummaryExpenseScreenState();
+  State<SummaryScreen> createState() => _SummaryScreenState();
 }
 
-class _SummaryExpenseScreenState extends State<SummaryExpenseScreen> {
+class _SummaryScreenState extends State<SummaryScreen> {
   ScreenshotController screenshotController = ScreenshotController();
   DateTime selectedDate = DateTime.now();
   ExpenseSummary summary = ExpenseSummary(

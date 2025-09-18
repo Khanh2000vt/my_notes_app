@@ -7,11 +7,11 @@ class NavigationBarWidget extends StatelessWidget {
   const NavigationBarWidget({
     super.key,
     required this.members,
-    required this.onRefresh,
+    required this.onAdd,
   });
 
   final List<Member>? members;
-  final Future<void> Function() onRefresh;
+  final void Function() onAdd;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +28,8 @@ class NavigationBarWidget extends StatelessWidget {
           ? null
           : CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Text(' Thêm khoản'),
-              onPressed: () {
-                context.push(Routes.expense, extra: members).then((value) {
-                  onRefresh();
-                });
-              },
+              onPressed: onAdd,
+              child: Text('Thêm'),
             ),
     );
   }

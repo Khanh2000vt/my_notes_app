@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_notes_app/features/expense/expense_screen.dart';
+import 'package:my_notes_app/features/expense/model/expense_model.dart';
 import 'package:my_notes_app/features/room/room_screen.dart';
-import 'package:my_notes_app/features/summary_expense/summary_expense_screen.dart';
-import 'package:my_notes_app/interface/member.dart';
+import 'package:my_notes_app/features/summary/summary_screen.dart';
 import 'package:my_notes_app/routing/routes.dart';
 
 final ValueNotifier<String?> authToken = ValueNotifier(null);
@@ -41,14 +41,14 @@ final router = GoRouter(
     GoRoute(
       path: Routes.expense,
       builder: (context, state) {
-        final members = state.extra as List<Member>? ?? [];
-        return ExpenseScreen(members: members);
+        final model = state.extra as ExpenseModel;
+        return ExpenseScreen(model: model);
       },
     ),
     GoRoute(
       path: Routes.summaryExpense,
       builder: (context, state) {
-        return SummaryExpenseScreen();
+        return SummaryScreen();
       },
     ),
   ],

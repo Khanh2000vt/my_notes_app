@@ -1,11 +1,11 @@
 class ExpenseShare {
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final int memberId;
   final int expenseId;
   final num shareAmount;
 
   ExpenseShare({
-    required this.createdAt,
+    this.createdAt,
     required this.memberId,
     required this.expenseId,
     required this.shareAmount,
@@ -22,7 +22,6 @@ class ExpenseShare {
 
   Map<String, dynamic> toJson() {
     return {
-      'created_at': createdAt.toIso8601String(),
       'member_id': memberId,
       'expense_id': expenseId,
       'share_amount': shareAmount,
