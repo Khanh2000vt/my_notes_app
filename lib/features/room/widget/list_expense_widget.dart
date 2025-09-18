@@ -24,7 +24,7 @@ class ListExpenseWidget extends StatelessWidget {
           return const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(top: 24.0),
-              child: Center(),
+              child: Center(child: CupertinoActivityIndicator()),
             ),
           );
         }
