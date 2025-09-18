@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_notes_app/features/room/create_room/widget/fixed_amount_room_widget.dart';
-import 'package:my_notes_app/features/room/create_room/widget/member_room_widget.dart';
-import 'package:my_notes_app/features/room/create_room/widget/reminder_daily_room.dart';
-import 'package:my_notes_app/features/room/create_room/widget/reminder_monthly_room.dart';
-import 'package:my_notes_app/features/room/create_room/widget/room_information_widget.dart';
+import 'package:my_notes_app/features/create_room/widget/fixed_amount_room_widget.dart';
+import 'package:my_notes_app/features/create_room/widget/member_room_widget.dart';
+import 'package:my_notes_app/features/create_room/widget/reminder_daily_room.dart';
+import 'package:my_notes_app/features/create_room/widget/reminder_monthly_room.dart';
+import 'package:my_notes_app/features/create_room/widget/room_information_widget.dart';
 
 class CreateRoomScreen extends StatefulWidget {
   const CreateRoomScreen({super.key});

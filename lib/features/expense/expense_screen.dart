@@ -12,21 +12,21 @@ import 'package:my_notes_app/shared/atomic/text_field_money/text_field_money_wid
 import 'package:my_notes_app/shared/molecular/modal_popup/modal_popup.dart';
 import 'package:my_notes_app/utils/string_handle.dart';
 
-class AddExpenseScreen extends StatefulWidget {
-  const AddExpenseScreen({super.key, required this.members});
+class ExpenseScreen extends StatefulWidget {
+  const ExpenseScreen({super.key, required this.members});
   final List<Member> members;
 
   @override
-  State<AddExpenseScreen> createState() => _AddExpenseScreenState();
+  State<ExpenseScreen> createState() => _ExpenseScreenState();
 }
 
-class _AddExpenseScreenState extends State<AddExpenseScreen> {
+class _ExpenseScreenState extends State<ExpenseScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final categories = CategoryExpense.values;
   bool _isFormValid = false;
   String amount = '';
 
-  Future<void> _onSave() async {
+  Future<void> _onSave({bool? isSave}) async {
     final formState = _formKey.currentState;
     if (formState == null) {
       return;
@@ -34,8 +34,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     if (formState.saveAndValidate()) {
       final formData = formState.value;
       await ExpenseService().upsertExpenseRoom(formData);
-    } else {
-      print('Validation failed');
+      if (isSave == true) {
+        context.pop();
+      } else {
+        formState.reset();
+        setState(() {
+          _isFormValid = false;
+          amount = '';
+        });
+      }
     }
   }
 
@@ -159,6 +166,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                   initialDateTime: DateTime.now(),
                                   onDateTimeChanged: field.didChange,
                                   mode: CupertinoDatePickerMode.date,
+                                  maximumDate: DateTime.now(),
                                 ),
                               ),
                             ),
@@ -222,8 +230,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         pressedOpacity: 0.9,
                         onPressed: _isFormValid
                             ? () {
-                                _onSave();
-                                // context.push(Routes.addExpense);
+                                _onSave(isSave: true);
                               }
                             : null,
                         child: Text('Thêm'),

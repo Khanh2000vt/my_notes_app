@@ -67,6 +67,7 @@ class _ConfigExportWidgetState extends State<ConfigExportWidget> {
                       Navigator.pop(context, {
                         'group': group,
                         'members': members,
+                        'selectedDate': selectedDate,
                       });
                     },
                   ),
@@ -114,12 +115,21 @@ class _ConfigExportWidgetState extends State<ConfigExportWidget> {
                               onChanged: (value) {
                                 setState(() {
                                   if (isSelected) {
-                                    members.removeWhere(
-                                      (m) => m.memberId == member.memberId,
-                                    );
+                                    members = members
+                                        .where(
+                                          (m) => m.memberId != member.memberId,
+                                        )
+                                        .toList();
                                   } else {
-                                    members.add(member);
+                                    members = [...members, member];
                                   }
+                                  // if (isSelected) {
+                                  //   members.removeWhere(
+                                  //     (m) => m.memberId == member.memberId,
+                                  //   );
+                                  // } else {
+                                  //   members.add(member);
+                                  // }
                                 });
                               },
                             ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_notes_app/routing/routes.dart';
 
 class BottomTabScreen extends StatefulWidget {
   final Widget child;
@@ -13,7 +12,7 @@ class BottomTabScreen extends StatefulWidget {
 class _BottomTabScreenState extends State<BottomTabScreen> {
   int _selectedIndex = 0;
 
-  static const List<String> _routes = [Routes.home, Routes.settings];
+  static const List<String> _routes = [];
 
   void _onItemTapped(int index) {
     setState(() {

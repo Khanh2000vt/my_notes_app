@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:my_notes_app/features/room/room/widget/list_member_widget.dart';
+import 'package:my_notes_app/features/room/widget/list_member_widget.dart';
 import 'package:my_notes_app/helper/date_time_format.dart';
 import 'package:my_notes_app/interface/room.dart';
 import 'package:my_notes_app/utils/string_handle.dart';
@@ -49,6 +49,7 @@ class HeaderStickyWidget extends StatelessWidget {
                   mode: CupertinoDatePickerMode.monthYear,
                   initialDateTime: selected,
                   use24hFormat: true,
+                  maximumDate: DateTime.now(),
                   onDateTimeChanged: (DateTime value) {
                     selected = value;
                   },

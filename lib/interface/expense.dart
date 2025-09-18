@@ -1,6 +1,6 @@
 class Expense {
   final int? id;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final int category;
   final num? amount;
   final DateTime? date;
@@ -8,8 +8,8 @@ class Expense {
   final int? payerId;
 
   Expense({
-    required this.id,
-    required this.createdAt,
+    this.id,
+    this.createdAt,
     required this.category,
     this.amount,
     this.date,
@@ -33,8 +33,8 @@ class Expense {
   /// Convert Expenses -> JSON (để insert/update Supabase)
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'created_at': createdAt.toUtc().toIso8601String(),
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt!.toUtc().toIso8601String(),
       'category': category,
       'amount': amount,
       'date': date?.toUtc().toIso8601String(),
@@ -53,7 +53,6 @@ class Expense {
     int? payerId,
   }) {
     return Expense(
-      id: null,
       createdAt: DateTime.now().toUtc(),
       category: category,
       amount: amount,

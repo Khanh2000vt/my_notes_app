@@ -14,7 +14,7 @@ Future<void> main() async {
     url: dotenv.env['SUPABASE_URL'] ?? '',
     anonKey: dotenv.env['SUPABASE_KEY'] ?? '',
   );
-  await initializeAuthToken();
+  // await initializeAuthToken();
   runApp(const MyApp());
 }
 
