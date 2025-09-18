@@ -85,7 +85,7 @@ class NotificationApp {
       matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
     );
     showNotification(
-      id: notifId,
+      id: notifId + 10,
       title: 'Hôm nay là sinh nhật của $name',
       body: 'Đừng quên gửi lời chúc mừng nhé!',
       scheduledDate: nextInstanceOfBirthday(day: day, month: month),
