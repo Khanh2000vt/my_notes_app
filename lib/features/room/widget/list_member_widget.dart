@@ -25,10 +25,7 @@ class ListMemberWidget extends StatelessWidget {
           for (int i = 0; i < displayCount; i++)
             Positioned(
               left: i * (size * 0.6),
-              child: AvatarWidget(
-                radius: size / 2,
-                name: members[i].id.toString(),
-              ),
+              child: AvatarWidget(radius: size / 2, name: members[i].name),
             ),
           if (extraCount > 0)
             Positioned(

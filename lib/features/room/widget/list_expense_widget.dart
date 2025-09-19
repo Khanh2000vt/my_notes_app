@@ -56,7 +56,7 @@ class ListExpenseWidget extends StatelessWidget {
                 ),
               ),
               trailing: const CupertinoListTileChevron(),
-              leading: AvatarWidget(name: item.payerId.toString()),
+              leading: AvatarWidget(name: item.payer.name),
               backgroundColor:
                   (index % 2 == 0
                           ? CupertinoColors.secondarySystemBackground

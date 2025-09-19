@@ -78,7 +78,7 @@ class CheckWidget extends StatelessWidget {
               : [
                   ...members.map((member) {
                     return CupertinoListTile(
-                      leading: AvatarWidget(name: member.memberId.toString()),
+                      leading: AvatarWidget(name: member.name),
                       title: Text(member.name),
                       additionalInfo: member.own == true
                           ? null

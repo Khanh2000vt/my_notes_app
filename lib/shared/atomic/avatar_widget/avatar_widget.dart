@@ -54,7 +54,7 @@ class _AvatarWidgetState extends State<AvatarWidget> {
       child: ClipOval(
         child: Image.network(
           (_debouncedName != null && _debouncedName != '')
-              ? 'https://api.dicebear.com/9.x/thumbs/png?seed=$_debouncedName'
+              ? 'https://api.dicebear.com/9.x/initials/png?seed=$_debouncedName'
               : '',
           width: size,
           height: size,

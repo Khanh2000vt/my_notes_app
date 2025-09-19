@@ -61,6 +61,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
         context.pop();
       } else {
         formState.reset();
+        formState.save();
+
         setState(() {
           _isFormValid = false;
           amount = '';
@@ -341,7 +343,7 @@ class CheckboxMember extends StatelessWidget {
             child: CupertinoRadio<int>(value: member.id, enabled: isChecked),
           ),
           SizedBox(width: 12),
-          AvatarWidget(name: member.id.toString()),
+          AvatarWidget(name: member.name),
           SizedBox(width: 12),
           Expanded(
             child: Column(

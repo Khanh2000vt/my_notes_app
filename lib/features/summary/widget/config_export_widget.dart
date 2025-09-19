@@ -106,7 +106,7 @@ class _ConfigExportWidgetState extends State<ConfigExportWidget> {
                             prefix: Row(
                               spacing: 10,
                               children: [
-                                AvatarWidget(name: member.memberId.toString()),
+                                AvatarWidget(name: member.name),
                                 Text(member.name),
                               ],
                             ),
