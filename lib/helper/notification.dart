@@ -53,8 +53,8 @@ class NotificationApp {
   void scheduleDailyTenPMNotificationSimple() {
     showNotification(
       id: 100,
-      title: 'Nhắc nhở hằng ngày',
-      body: 'Đây là thông báo lúc 10h tối!',
+      title: 'Cập nhật chi tiêu',
+      body: 'Cập nhật tiền chi tiêu hôm nay nào!',
       scheduledDate: nextInstanceOfTenPM(),
       matchDateTimeComponents: DateTimeComponents.time,
     );

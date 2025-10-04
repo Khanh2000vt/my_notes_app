@@ -28,8 +28,8 @@ Future<void> main() async {
 
 Future<void> initializeAuthToken() async {
   final prefs = await SharedPreferences.getInstance();
-  final token = prefs.getString(StorageConstants.authToken);
-  authToken.value = token;
+  final userId = prefs.getString(StorageConstants.authToken);
+  authToken.value = userId;
 }
 
 class MyApp extends StatelessWidget {

@@ -43,10 +43,7 @@ class CheckWidget extends StatelessWidget {
             ),
             CupertinoListTile(
               title: Text('Tiền nhà'),
-              additionalInfo: Text(
-                '5.500.000 đ',
-                style: TextStyle(fontSize: 14),
-              ),
+              additionalInfo: Text('5.500 đ', style: TextStyle(fontSize: 14)),
             ),
             ...summary.byCategory.map((category) {
               return CupertinoListTile(
