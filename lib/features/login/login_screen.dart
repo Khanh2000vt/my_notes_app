@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:my_notes_app/core/constants/storage_constants.dart';
 import 'package:my_notes_app/routing/router.dart';
 import 'package:my_notes_app/services/login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_notes_app/utils/string_handle.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,8 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final idUser = await LoginService().checkUserOtp(username, password);
 
       if (idUser != null) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString(StorageConstants.authToken, idUser.toString());
+        await setUserId(idUser);
         authToken.value = idUser.toString();
       } else {
         if (context.mounted) {
@@ -51,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(middle: Text('Login')),
+      navigationBar: const CupertinoNavigationBar(middle: Text('Đăng nhập')),
       child: SafeArea(
         child: Center(
           child: FormBuilder(

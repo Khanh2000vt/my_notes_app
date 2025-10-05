@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_notes_app/features/expense/expense_screen.dart';
 import 'package:my_notes_app/features/expense/model/expense_model.dart';
+import 'package:my_notes_app/features/home/home_screen.dart';
 import 'package:my_notes_app/features/login/login_screen.dart';
+import 'package:my_notes_app/features/personal_expenses/personal_expenses_screen.dart';
 import 'package:my_notes_app/features/room/room_screen.dart';
 import 'package:my_notes_app/features/summary/summary_screen.dart';
 import 'package:my_notes_app/routing/routes.dart';
@@ -28,11 +30,17 @@ final router = GoRouter(
     }
     // Nếu đã đăng nhập và ở trang login, chuyển hướng đến home
     if (isLoggedIn && isLoginPage) {
-      return Routes.room;
+      return Routes.home;
     }
     return null; // Không cần chuyển hướng
   },
   routes: [
+    GoRoute(
+      path: Routes.home,
+      builder: (context, state) {
+        return HomeScreen();
+      },
+    ),
     GoRoute(
       path: Routes.room,
       builder: (context, state) {
@@ -56,6 +64,12 @@ final router = GoRouter(
       path: Routes.login,
       builder: (context, state) {
         return LoginScreen();
+      },
+    ),
+    GoRoute(
+      path: Routes.personalExpenses,
+      builder: (context, state) {
+        return PersonalExpensesScreen();
       },
     ),
   ],

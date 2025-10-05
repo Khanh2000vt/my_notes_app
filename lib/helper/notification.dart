@@ -10,6 +10,24 @@ class NotificationApp {
     notification = FlutterLocalNotificationsPlugin();
   }
 
+  Future<void> showTestNotification() async {
+    const iosDetails = DarwinNotificationDetails(
+      sound: 'notify.aiff',
+      presentSound: true,
+    );
+    const platformDetails = NotificationDetails(iOS: iosDetails);
+    await notification.show(
+      999,
+      'Test thông báo 🔔',
+      'Đây là thông báo test âm thanh tuỳ chỉnh',
+      platformDetails,
+    );
+  }
+
+  Future<void> cancelAll() async {
+    await notification.cancelAll();
+  }
+
   Future<void> runNotification() async {
     const DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
@@ -29,12 +47,13 @@ class NotificationApp {
     String? title,
     String? body,
     required tz.TZDateTime scheduledDate,
-    DateTimeComponents? matchDateTimeComponents = DateTimeComponents.time,
+    DateTimeComponents? matchDateTimeComponents,
   }) async {
     const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
+      sound: 'notify.aiff',
     );
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       iOS: iosDetails,
@@ -82,14 +101,12 @@ class NotificationApp {
       title: 'Sắp đến sinh nhật của $name',
       body: 'Đừng quên gửi lời chúc mừng nhé!',
       scheduledDate: nextInstanceOfBirthdayBefore1Week(day: day, month: month),
-      matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
     );
     showNotification(
       id: notifId + 10,
       title: 'Hôm nay là sinh nhật của $name',
       body: 'Đừng quên gửi lời chúc mừng nhé!',
       scheduledDate: nextInstanceOfBirthday(day: day, month: month),
-      matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
     );
   }
 }

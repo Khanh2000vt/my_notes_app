@@ -16,20 +16,31 @@ class NavigationBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoSliverNavigationBar(
-      leading: CupertinoButton(
-        padding: EdgeInsets.zero,
-        child: Text('Tổng kết'),
+      leading: CupertinoNavigationBarBackButton(
+        previousPageTitle: 'Trở lại',
         onPressed: () {
-          context.push(Routes.summaryExpense);
+          context.pop();
         },
       ),
       largeTitle: Text('Phòng'),
       trailing: members == null
           ? null
-          : CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: onAdd,
-              child: Text('Thêm'),
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: Icon(CupertinoIcons.chart_bar),
+                  onPressed: () {
+                    context.push(Routes.summaryExpense);
+                  },
+                ),
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: onAdd,
+                  child: Icon(CupertinoIcons.add),
+                ),
+              ],
             ),
     );
   }

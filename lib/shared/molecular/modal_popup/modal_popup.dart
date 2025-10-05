@@ -32,7 +32,7 @@ class ModalPopupApp {
                       },
                     ),
                     CupertinoButton(
-                      child: Text('Chọn'),
+                      child: Text('Xác nhận'),
                       onPressed: () {
                         Navigator.pop(context, selected);
                       },
